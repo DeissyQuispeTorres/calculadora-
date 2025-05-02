@@ -170,10 +170,10 @@ public class CalcfxControl {
             to.setOperador(operador.charAt(0));
             to.setResultado(String.valueOf(resultado));
             if(indexID!=-1){
-                servicioI.update(to,indexID);
+                calcRepoSql.actualizarEntidad(to, indexID);
             }else{
                 calcRepoSql.guardarCliente(to);
-                servicioI.save(to);
+
             }
             listar();
     txtResultado.setText("");
@@ -217,11 +217,8 @@ public class CalcfxControl {
                 editButton.getStyleClass().setAll("btn", "btn-success");
                 editButton.setOnAction(event -> {
                     CalcTO cal = getTableView().getItems().get(getIndex());
-                    editOperCalc(cal, getIndex());
-                    edit = true;
-                    if (edit){
-                        mostrar(getIndex());
-                    }
+                    editOperCalc(cal,
+                            cal.getId());
 
                 });
                 deleteButton.getStyleClass().setAll("btn", "btn-danger");
@@ -252,10 +249,12 @@ public class CalcfxControl {
     public void editOperCalc(CalcTO to, int index){
         txtResultado.setText(to.getNum1()+ " " + to.getOperador() + " " + to.getNum2());
         indexID= index;
+        calcRepoSql.actualizarEntidad(to, indexID);
         edit = false;
     }
     public void deleteOperCalc(CalcTO to){
         servicioI.delete(to);
+        calcRepoSql.eliminarEntidad(to);
         listar();
 
     }
